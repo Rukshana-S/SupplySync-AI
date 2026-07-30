@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from api import auth, agents
+from api import auth, agents, shipments
 from core.config import settings
 from db.session import connect_to_mongo, close_mongo_connection
 
@@ -29,3 +29,4 @@ async def health_check():
 
 app.include_router(auth.router, prefix="/api/auth", tags=["auth"])
 app.include_router(agents.router, prefix="/api/agents", tags=["agents"])
+app.include_router(shipments.router, prefix="/api/shipments", tags=["shipments"])

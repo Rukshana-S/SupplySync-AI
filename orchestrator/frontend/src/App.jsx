@@ -7,6 +7,8 @@ import DriverRegistration from './pages/DriverRegistration';
 import ShipperRegistration from './pages/ShipperRegistration';
 import DriverDashboard from './pages/DriverDashboard';
 import ShipperDashboard from './pages/ShipperDashboard';
+import CreateShipment from './pages/CreateShipment';
+import ShipmentTracking from './pages/ShipmentTracking';
 import SystemStatus from './pages/SystemStatus';
 import NotFoundPage from './pages/NotFoundPage';
 import Navbar from './components/Navbar';
@@ -42,6 +44,18 @@ function App() {
           <Route path="/dashboard" element={
             <ProtectedRoute>
               <DashboardRouter />
+            </ProtectedRoute>
+          } />
+          
+          <Route path="/shipments/create" element={
+            <ProtectedRoute>
+              <CreateShipment />
+            </ProtectedRoute>
+          } />
+
+          <Route path="/shipments/:id" element={
+            <ProtectedRoute>
+              <ShipmentTracking />
             </ProtectedRoute>
           } />
           
