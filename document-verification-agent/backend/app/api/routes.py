@@ -35,6 +35,12 @@ async def upload_document(
     Uploads a document, runs EasyOCR, parses fields, sends to Groq for AI verification,
     and returns a comprehensive structured JSON response.
     """
+    logger.info(f"Incoming POST request to /upload-document. documentType: {documentType}")
+    if file:
+        logger.info(f"File received: {file.filename}, type: {file.content_type}")
+    else:
+        logger.error("No file received in the request.")
+
     if not file:
         raise HTTPException(status_code=400, detail="File is missing")
 
@@ -48,12 +54,14 @@ async def upload_document(
     # RC Book only accepts PDF
     if doc_type_clean == "rc_book":
         if not is_pdf:
+            logger.error("RC Book upload failed: Not a PDF.")
             return {
                 "success": False,
                 "message": "For RC Book only PDF files are supported."
             }
     else:
         if not (is_pdf or is_image):
+            logger.error(f"Upload failed: Invalid file type '{file.content_type}' for {doc_type_clean}.")
             raise HTTPException(
                 status_code=400,
                 detail="Invalid file type. Only PDF, PNG, JPG, and JPEG files are allowed."
@@ -61,6 +69,7 @@ async def upload_document(
 
     file_content = await file.read()
     if len(file_content) > MAX_FILE_SIZE_BYTES:
+        logger.error("Upload failed: File size exceeds the maximum limit.")
         raise HTTPException(status_code=400, detail="File size exceeds the maximum limit of 10 MB.")
 
     os.makedirs(UPLOAD_DIR, exist_ok=True)
@@ -68,6 +77,7 @@ async def upload_document(
     try:
         with open(file_path, "wb") as buffer:
             buffer.write(file_content)
+        logger.info(f"File saved successfully to {file_path}")
     except Exception as e:
         logger.error(f"Failed to save uploaded file: {e}")
         raise HTTPException(status_code=500, detail="Failed to save uploaded file")

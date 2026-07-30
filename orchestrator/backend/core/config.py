@@ -6,10 +6,11 @@ class Settings(BaseSettings):
     SECRET_KEY: str = "PLACEHOLDER_SECRET_KEY"
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
-    MONGODB_URL: str = "mongodb://localhost:27017"
-    DATABASE_NAME: str = "supplysync_orchestrator"
+    MONGODB_URI: str = "mongodb+srv://rukshanas2024cse_db_user:RzZ2tpfgAu9TgQ6t@supplysyncai.3xhlekb.mongodb.net/?retryWrites=true&w=majority&appName=SupplySyncAI"
+    DATABASE_NAME: str = "SupplySyncAI"
 
     class Config:
         case_sensitive = True
+        env_file = ".env"
 
 settings = Settings()
